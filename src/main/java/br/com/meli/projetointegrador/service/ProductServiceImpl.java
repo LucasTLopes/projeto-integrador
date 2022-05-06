@@ -61,6 +61,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product save(Product product) {
+        return productRepository.save(product);
+    }
+
+    @Override
     public List<ProductDTOi> findAllByBatchListExists() {
         if(productRepository.findAllByBatchListExists().size() == 0){
             throw new EmptyProductListException("No products were found for this search.");
@@ -93,4 +98,5 @@ public class ProductServiceImpl implements ProductService {
         List<Batch> batches = batchService.getBatchesWithExpirationDateGreaterThan3Weeks(id);
         return batches.stream().reduce(0, (acc, nextBatch) -> acc + nextBatch.getCurrentQuantity(), Integer::sum);
     }
+
 }
