@@ -67,9 +67,18 @@ public class ProductController {
      */
     @PostMapping("/catalog/add")
     @PreAuthorize("hasRole('ROLE_STOCK_MANAGER')")
-    public ResponseEntity<ProductDTO> postProductInCatalog(@Valid @RequestBody ProductDTO productDTO) {
+    public ResponseEntity<ProductDTO> insertProductInCatalog(@Valid @RequestBody ProductDTO productDTO) {
         return  new ResponseEntity<>(ProductDTO.map(productService.save(ProductDTO.map(productDTO))), HttpStatus.CREATED);
     }
+
+//    /**
+//     * Método responsável por inserir produto no catalago
+//     */
+//    @PutMapping("/catalog/")
+//    @PreAuthorize("hasRole('ROLE_STOCK_MANAGER')")
+//    public ResponseEntity<ProductDTO> updateProductInCatalog(@@PathVariable Long productid) {
+//        return new ResponseEntity<>(ProductDTO.map(productService.findById(productid)), HttpStatus.CREATED;
+//    }
 
 
 }
