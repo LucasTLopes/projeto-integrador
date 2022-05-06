@@ -1,9 +1,6 @@
 package br.com.meli.projetointegrador;
 
-import br.com.meli.projetointegrador.dto.BatchStockDTO;
-import br.com.meli.projetointegrador.dto.InboundOrderDTO;
-import br.com.meli.projetointegrador.dto.ProductDTOi;
-import br.com.meli.projetointegrador.dto.ProductDTOiImpl;
+import br.com.meli.projetointegrador.dto.*;
 import br.com.meli.projetointegrador.model.Product;
 import br.com.meli.projetointegrador.model.request.LoginRequest;
 import br.com.meli.projetointegrador.model.response.JwtResponse;
@@ -22,8 +19,10 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -68,6 +67,15 @@ public class ProductIntegrationTest {
                 "    ]\n" +
                 "}";
     }
+    public String insertProduct() {
+        return "{\n" +
+                "        \"id\": 4,\n" +
+                "        \"name\": \"Maca\",\n" +
+                "        \"price\": 2.0,\n" +
+                "        \"width\": 0.3,\n" +
+                "        \"height\": 0.3\n" +
+                "    }";
+    }
 
     private String postInboundOrder(InboundOrderDTO inboundOrderDTO, ResultMatcher resultMatcher, String jwt) throws Exception {
 
@@ -80,7 +88,17 @@ public class ProductIntegrationTest {
 
         return response.getResponse().getContentAsString();
     }
+    private String postProductInCatalog(Product product, ResultMatcher resultMatcher, String jwt) throws Exception {
 
+        MvcResult response = mockmvc.perform(post("/api/v1/fresh-products/catalog/add")
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + jwt)
+                .content(objectMapper.writeValueAsString(product)))
+                .andExpect(resultMatcher)
+                .andReturn();
+
+        return response.getResponse().getContentAsString();
+    }
     private String getAllProduct(ResultMatcher resultMatcher, String jwt) throws Exception {
 
         MvcResult response = mockmvc.perform(get("/api/v1/fresh-products/")
@@ -96,6 +114,15 @@ public class ProductIntegrationTest {
         MvcResult response = mockmvc.perform(get("/api/v1/fresh-products/list/")
                 .header("Authorization", "Bearer " + jwt)
                 .param("category","FS"))
+                .andExpect(resultMatcher)
+                .andReturn();
+
+        return response.getResponse().getContentAsString();
+    }
+    private String getCatalog(ResultMatcher resultMatcher, String jwt) throws Exception {
+
+        MvcResult response = mockmvc.perform(get("/api/v1/fresh-products/catalog")
+                .header("Authorization", "Bearer " + jwt))
                 .andExpect(resultMatcher)
                 .andReturn();
 
@@ -200,6 +227,35 @@ public class ProductIntegrationTest {
                 new TypeReference<>() {  });
 
         assertEquals(productDTOis.size(), productDTOiList.size());
+
+    }
+
+    @Test
+    void catalogListAllTest()throws Exception {
+        List<Product> productList = productRepository.findAll();
+
+        List<ProductDTO> productDTOList = objectMapper.readValue(getCatalog(status().isOk(), STOCK_MANAGER_JWT),
+                new TypeReference<>() {});
+
+        assertEquals(productList.size(), productDTOList.size());
+
+    }
+
+    @Test
+    void postProductInCatalogTest() throws Exception{
+        String productString = insertProduct();
+        Product product = objectMapper.readValue(productString ,new TypeReference<>() {});
+        ProductDTO productDTO = objectMapper.readValue(postProductInCatalog(product, status().isCreated(), STOCK_MANAGER_JWT), new TypeReference<ProductDTO>() {
+        });
+
+        productRepository.findAllById(4L);
+
+        assertAll(
+                () -> assertEquals("Maca", productDTO.getName()),
+                () -> assertEquals(2.0, productDTO.getPrice()),
+                () -> assertEquals(0.3, productDTO.getWidth()),
+                () -> assertEquals(0.3, productDTO.getHeight())
+        );
 
     }
 
