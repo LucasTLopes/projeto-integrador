@@ -16,4 +16,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "join section s on s.id=b.section_id where s.category=?1 group by p.id", nativeQuery = true)
     List<ProductDTOi> findAllByBatchListExistsBySection(String category);
 
+    Product findAllById(Long id);
 }
