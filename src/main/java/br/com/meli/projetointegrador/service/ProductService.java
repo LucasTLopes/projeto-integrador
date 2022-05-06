@@ -21,6 +21,8 @@ public interface ProductService {
 
     Integer getTotalQuantity(Long id);
 
-    public List<Product> findAll();
+    List<Product> findAll();
+
+    Product save(Product product);
 
 }
