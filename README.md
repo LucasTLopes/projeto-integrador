@@ -70,7 +70,7 @@ Spring Boot is an "opinionated" application bootstrapping framework that makes i
 ## REQUIREMENT 6 by Lucas Troleiz Lopes
 
     Capability to a Stock Manager, insert products on catalog of meli-fresh DB
-    [pdf user story](https://github.com/LucasTLopes/projeto-integrador/blob/main/Docs/Requisito%206%20User%20Story.pdf) 
+   [pdf user story](https://github.com/LucasTLopes/projeto-integrador/blob/main/Docs/Requisito%206%20User%20Story.pdf) 
 
 # Questions and Comments:
      Open a issue on this project 
