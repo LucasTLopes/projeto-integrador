@@ -67,7 +67,9 @@ matches.
 
 Spring Boot is an "opinionated" application bootstrapping framework that makes it easy to create new RESTful services (among other types of applications). It provides many of the usual Spring facilities that can be configured easily usually without any XML. 
 
+## REQUIREMENT 6 by Lucas Troleiz Lopes
 
+    Capability to a Stock Manager, insert products on catalog of meli-fresh DB 
 
 # Questions and Comments:
      Open a issue on this project 
