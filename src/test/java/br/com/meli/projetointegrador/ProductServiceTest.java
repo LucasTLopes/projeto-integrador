@@ -147,7 +147,25 @@ public class ProductServiceTest {
     }
 
 
+    @Test
+    public void Catalog(){
+        List<Product> products = Arrays.asList(
+                new Product( "Tomato", 2.00, 5.0, 4.0),
+                new Product("Meat", 40.00, 10.0, 10.0));
 
+        Mockito.when(productRepository.findAll()).thenReturn(products);
 
+        assertEquals(products.size(), productService.findAll().size());
+    }
+    private Product generateProduct(){
+        return   new Product( "Tomato", 2.00, 5.0, 4.0);
+    }
+
+    @Test
+    public void saveTest() {
+        Product product = generateProduct();
+        Mockito.when(productRepository.save(Mockito.any())).thenReturn((product));
+        assertEquals(product.getId(), productService.save(product).getId());
+    }
 
 }
