@@ -25,4 +25,10 @@ public class Product {
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<Batch> batchList = new ArrayList<>();
 
+    public Product(String name, Double price, Double width, Double height) {
+        this.name = name;
+        this.price = price;
+        this.width = width;
+        this.height = height;
+    }
 }
